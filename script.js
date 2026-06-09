@@ -5,8 +5,11 @@ const progress = document.querySelector(".progress span");
 const counter = document.querySelector(".counter");
 const prevButton = document.querySelector("[data-prev]");
 const nextButton = document.querySelector("[data-next]");
-const chapterLinks = Array.from(document.querySelectorAll(".chapter-nav a"))
+const menuToggle = document.querySelector(".menu-toggle");
+const mobileMenu = document.querySelector(".mobile-menu");
+const chapterLinks = Array.from(document.querySelectorAll(".chapter-nav a, .mobile-menu a"))
   .filter((link) => document.querySelector(link.getAttribute("href")));
+const chapterTargets = [...new Set(chapterLinks.map((link) => link.getAttribute("href")))];
 
 let activeIndex = 0;
 let wheelLock = false;
@@ -29,6 +32,12 @@ function scrollToSlide(index) {
   slides[nextIndex].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
 }
 
+function closeMobileMenu() {
+  menuToggle?.classList.remove("is-open");
+  mobileMenu?.classList.remove("is-open");
+  menuToggle?.setAttribute("aria-expanded", "false");
+}
+
 function updateActiveState() {
   const slideWidth = stage.clientWidth || window.innerWidth;
   const exactIndex = stage.scrollLeft / slideWidth;
@@ -48,10 +57,11 @@ function updateActiveState() {
   });
 
   chapterLinks.forEach((link) => {
-    const target = document.querySelector(link.getAttribute("href"));
+    const href = link.getAttribute("href");
+    const target = document.querySelector(href);
     const targetIndex = slides.indexOf(target);
-    const nextTarget = chapterLinks[chapterLinks.indexOf(link) + 1];
-    const nextSlide = nextTarget ? document.querySelector(nextTarget.getAttribute("href")) : null;
+    const nextTarget = chapterTargets[chapterTargets.indexOf(href) + 1];
+    const nextSlide = nextTarget ? document.querySelector(nextTarget) : null;
     const nextIndex = nextSlide ? slides.indexOf(nextSlide) : slides.length;
     link.classList.toggle("is-active", targetIndex >= 0 && activeIndex >= targetIndex && activeIndex < nextIndex);
   });
@@ -103,14 +113,29 @@ function handleKeydown(event) {
     event.preventDefault();
     scrollToSlide(slides.length - 1);
   }
+
+  if (event.key === "Escape") {
+    closeMobileMenu();
+  }
 }
 
 prevButton.addEventListener("click", () => scrollToSlide(activeIndex - 1));
 nextButton.addEventListener("click", () => scrollToSlide(activeIndex + 1));
+menuToggle?.addEventListener("click", () => {
+  const isOpen = !menuToggle.classList.contains("is-open");
+  menuToggle.classList.toggle("is-open", isOpen);
+  mobileMenu?.classList.toggle("is-open", isOpen);
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+});
 stage.addEventListener("scroll", updateActiveState, { passive: true });
 stage.addEventListener("wheel", handleWheel, { passive: false });
 window.addEventListener("keydown", handleKeydown);
 window.addEventListener("resize", updateActiveState);
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".topbar")) {
+    closeMobileMenu();
+  }
+});
 
 document.querySelectorAll('a[href^="#slide-"]').forEach((link) => {
   link.addEventListener("click", (event) => {
@@ -118,6 +143,7 @@ document.querySelectorAll('a[href^="#slide-"]').forEach((link) => {
     const index = slides.indexOf(target);
     if (index >= 0) {
       event.preventDefault();
+      closeMobileMenu();
       scrollToSlide(index);
     }
   });
