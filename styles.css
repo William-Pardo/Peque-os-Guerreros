@@ -286,9 +286,9 @@ a {
 
 .hero-slide .image-scrim {
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .92) 31%, rgba(255, 255, 255, .62) 47%, rgba(255, 255, 255, .08) 68%, rgba(255, 255, 255, 0) 100%),
-    radial-gradient(circle at 28% 38%, rgba(20, 85, 217, .12), transparent 34%),
-    radial-gradient(circle at 18% 74%, rgba(225, 40, 47, .10), transparent 28%);
+    linear-gradient(90deg, rgba(255, 255, 255, .98), rgba(255, 255, 255, .92) 29%, rgba(255, 255, 255, .18) 39%, rgba(255, 255, 255, 0) 48%),
+    radial-gradient(circle at 20% 40%, rgba(20, 85, 217, .10), transparent 25%),
+    radial-gradient(circle at 12% 74%, rgba(225, 40, 47, .08), transparent 22%);
 }
 
 .copy-panel {
@@ -331,7 +331,7 @@ a {
   padding: clamp(22px, 3vw, 34px);
   border-color: rgba(15, 23, 42, .08);
   color: var(--ink);
-  background: rgba(255, 255, 255, .72);
+  background: rgba(255, 255, 255, .86);
   box-shadow: 0 22px 70px rgba(15, 23, 42, .14);
 }
 
@@ -389,6 +389,11 @@ a {
 #slide-29 .copy-panel--compact h2 {
   max-width: 12ch;
   font-size: clamp(34px, 4.35vw, 66px);
+}
+
+#slide-27 .copy-panel h2 {
+  max-width: 13ch;
+  font-size: clamp(38px, 5.25vw, 78px);
 }
 
 .eyebrow {
@@ -478,8 +483,8 @@ h2 {
   left: 50%;
   bottom: 18px;
   display: flex;
-  max-width: min(820px, calc(100vw - 40px));
-  gap: 6px;
+  max-width: min(760px, calc(100vw - 40px));
+  gap: 5px;
   justify-content: center;
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, .56);
@@ -492,15 +497,15 @@ h2 {
 
 .slide-dots a {
   display: block;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 999px;
   background: rgba(15, 23, 42, .22);
   transition: width .25s var(--ease), background .25s var(--ease), transform .25s var(--ease);
 }
 
 .slide-dots a.is-active {
-  width: 30px;
+  width: 28px;
   background: linear-gradient(90deg, var(--red), var(--blue));
 }
 

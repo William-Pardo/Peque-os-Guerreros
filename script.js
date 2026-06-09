@@ -5,7 +5,8 @@ const progress = document.querySelector(".progress span");
 const counter = document.querySelector(".counter");
 const prevButton = document.querySelector("[data-prev]");
 const nextButton = document.querySelector("[data-next]");
-const chapterLinks = Array.from(document.querySelectorAll(".chapter-nav a"));
+const chapterLinks = Array.from(document.querySelectorAll(".chapter-nav a"))
+  .filter((link) => document.querySelector(link.getAttribute("href")));
 
 let activeIndex = 0;
 let wheelLock = false;
@@ -52,7 +53,7 @@ function updateActiveState() {
     const nextTarget = chapterLinks[chapterLinks.indexOf(link) + 1];
     const nextSlide = nextTarget ? document.querySelector(nextTarget.getAttribute("href")) : null;
     const nextIndex = nextSlide ? slides.indexOf(nextSlide) : slides.length;
-    link.classList.toggle("is-active", activeIndex >= targetIndex && activeIndex < nextIndex);
+    link.classList.toggle("is-active", targetIndex >= 0 && activeIndex >= targetIndex && activeIndex < nextIndex);
   });
 
   const percent = ((activeIndex + 1) / slides.length) * 100;
