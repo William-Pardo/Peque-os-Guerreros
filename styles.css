@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --ink: #111827;
   --muted: #64748b;
   --paper: #f8fafc;
@@ -111,6 +111,84 @@ a {
   color: var(--white);
   background: var(--blue);
   transform: translateY(-1px);
+}
+
+.menu-toggle {
+  display: none;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  gap: 4px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(15, 23, 42, .08);
+  cursor: pointer;
+  transition: background .25s var(--ease), transform .25s var(--ease);
+}
+
+.menu-toggle span {
+  display: block;
+  width: 17px;
+  height: 2px;
+  border-radius: 999px;
+  background: currentColor;
+  transition: transform .25s var(--ease), opacity .2s var(--ease);
+}
+
+.menu-toggle.is-open {
+  color: var(--white);
+  background: var(--blue);
+}
+
+.menu-toggle.is-open span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-toggle.is-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.is-open span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 12px;
+  display: grid;
+  min-width: 168px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, .72);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 18px 46px rgba(15, 23, 42, .2);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(.98);
+  transform-origin: top right;
+  transition: opacity .22s var(--ease), transform .22s var(--ease);
+  backdrop-filter: blur(18px);
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.mobile-menu a {
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.mobile-menu a.is-active {
+  color: var(--white);
+  background: var(--blue);
 }
 
 .controls {
@@ -601,11 +679,15 @@ h2 {
 
 @media (max-width: 980px) {
   .topbar {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
   .chapter-nav {
     display: none;
+  }
+
+  .menu-toggle {
+    display: grid;
   }
 
   .brand span {
@@ -809,17 +891,11 @@ h2 {
   }
 
   .brand span {
-    max-width: 24vw;
+    max-width: 28vw;
   }
 
   .chapter-nav {
-    display: flex;
-    gap: 2px;
-  }
-
-  .chapter-nav a {
-    padding: 7px 8px;
-    font-size: 12px;
+    display: none;
   }
 
   .copy-panel,
