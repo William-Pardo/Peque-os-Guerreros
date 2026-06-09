@@ -1,3 +1,5 @@
+/* script.js */
+
 const stage = document.querySelector("#stage");
 const slides = Array.from(document.querySelectorAll(".slide"));
 const dots = document.querySelector(".slide-dots");
@@ -7,8 +9,10 @@ const prevButton = document.querySelector("[data-prev]");
 const nextButton = document.querySelector("[data-next]");
 const menuToggle = document.querySelector(".menu-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
+
 const chapterLinks = Array.from(document.querySelectorAll(".chapter-nav a, .mobile-menu a"))
   .filter((link) => document.querySelector(link.getAttribute("href")));
+
 const chapterTargets = [...new Set(chapterLinks.map((link) => link.getAttribute("href")))];
 
 let activeIndex = 0;
@@ -29,7 +33,11 @@ function clamp(value, min, max) {
 
 function scrollToSlide(index) {
   const nextIndex = clamp(index, 0, slides.length - 1);
-  slides[nextIndex].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+  slides[nextIndex].scrollIntoView({
+    behavior: "smooth",
+    inline: "start",
+    block: "nearest",
+  });
 }
 
 function closeMobileMenu() {
@@ -47,6 +55,7 @@ function updateActiveState() {
   slides.forEach((slide, index) => {
     const offset = index - exactIndex;
     const localProgress = clamp(offset, -1, 1);
+
     slide.style.setProperty("--slide-progress", localProgress.toFixed(3));
     slide.style.setProperty("--active", index === activeIndex ? "1" : "0");
     slide.classList.toggle("is-active", index === activeIndex);
@@ -60,10 +69,15 @@ function updateActiveState() {
     const href = link.getAttribute("href");
     const target = document.querySelector(href);
     const targetIndex = slides.indexOf(target);
+
     const nextTarget = chapterTargets[chapterTargets.indexOf(href) + 1];
     const nextSlide = nextTarget ? document.querySelector(nextTarget) : null;
     const nextIndex = nextSlide ? slides.indexOf(nextSlide) : slides.length;
-    link.classList.toggle("is-active", targetIndex >= 0 && activeIndex >= targetIndex && activeIndex < nextIndex);
+
+    link.classList.toggle(
+      "is-active",
+      targetIndex >= 0 && activeIndex >= targetIndex && activeIndex < nextIndex
+    );
   });
 
   const percent = ((activeIndex + 1) / slides.length) * 100;
@@ -84,7 +98,9 @@ function handleWheel(event) {
 
   const direction = event.deltaY > 0 ? 1 : -1;
   scrollToSlide(activeIndex + direction);
+
   wheelLock = true;
+
   window.setTimeout(() => {
     wheelLock = false;
   }, 620);
@@ -121,16 +137,21 @@ function handleKeydown(event) {
 
 prevButton.addEventListener("click", () => scrollToSlide(activeIndex - 1));
 nextButton.addEventListener("click", () => scrollToSlide(activeIndex + 1));
+
 menuToggle?.addEventListener("click", () => {
   const isOpen = !menuToggle.classList.contains("is-open");
+
   menuToggle.classList.toggle("is-open", isOpen);
   mobileMenu?.classList.toggle("is-open", isOpen);
   menuToggle.setAttribute("aria-expanded", String(isOpen));
 });
+
 stage.addEventListener("scroll", updateActiveState, { passive: true });
 stage.addEventListener("wheel", handleWheel, { passive: false });
+
 window.addEventListener("keydown", handleKeydown);
 window.addEventListener("resize", updateActiveState);
+
 document.addEventListener("click", (event) => {
   if (!event.target.closest(".topbar")) {
     closeMobileMenu();
@@ -141,6 +162,7 @@ document.querySelectorAll('a[href^="#slide-"]').forEach((link) => {
   link.addEventListener("click", (event) => {
     const target = document.querySelector(link.getAttribute("href"));
     const index = slides.indexOf(target);
+
     if (index >= 0) {
       event.preventDefault();
       closeMobileMenu();
