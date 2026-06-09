@@ -1,0 +1,5 @@
+chunks/
+*.m4a
+*.wav
+.DS_Store
+Thumbs.db
